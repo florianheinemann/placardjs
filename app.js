@@ -34,26 +34,16 @@ app.use(express.session({	secret: config.http.cookie_secret,
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new LocalStrategy(
-	function(username, password, done) {
-		User.findOne({ username: username }, function(err, user) {
-			if(err) {
-				return done(err);
-			} else if(!user) {
-				return done(null, false, { message: 'Incorrect username.' });
-			} else if(!user.verifyPassword(password)) {
-				return done(null, false, { message: 'Incorrect password.' });
-			}
-			return done(null, user);
-		});
-	}
-));
-
 passport.serializeUser(User.serializeUser);
 passport.deserializeUser(User.deserializeUser);
 
-
-
+passport.use(new LocalStrategy(
+	function(username, password, done) {
+		User.verifyUser(username, password, function(error, validated) {
+			done(error, validated);
+		});
+	}
+));
 
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));

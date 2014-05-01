@@ -20,7 +20,6 @@ var backend = {
 			return res.json(401, {error: 'Please provide all necessary data'});
 		}
 
-		var backend = this;
 		User.createUser(req.body.username, req.body.password, true, function(error, user) {
 			if(error) {
 				// TODO: We shouldn't leak internal error messages

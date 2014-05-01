@@ -75,6 +75,66 @@ describe('User model', function() {
 		});
 	});
 
+	describe('User verification', function() {
+		it('should not verify empty user', function (done) {
+			User.verifyUser('', 'password', function(error, validated) {
+				expect(error).to.exist;
+				expect(validated).to.not.equal(true);
+				done();
+			})
+		});
+
+		it('should not verify empty password', function (done) {
+			User.verifyUser('user', '', function(error, validated) {
+				expect(error).to.exist;
+				expect(validated).to.not.equal(true);
+				done();
+			})
+		});
+
+		it('should not verify wrong passwords', function (done) {
+			User.createUser('frank', 'password', true, function(error, user) {
+				User.verifyUser('frank', 'wrongone', function(error, validated) {
+					expect(error).to.not.exist;
+					expect(validated).to.equal(false);
+					done();
+				})
+			});
+		});
+
+		it('should not verify non-existing users', function (done) {
+			User.createUser('frank', 'password', true, function(error, user) {
+				User.verifyUser('alice', 'password', function(error, validated) {
+					expect(error).to.not.exist;
+					expect(validated).to.equal(false);
+					done();
+				})
+			});
+		});
+
+		it('should verify users with correct details', function (done) {
+			User.createUser('frank', 'password', true, function(error, user) {
+				User.verifyUser('frank', 'password', function(error, validated) {
+					expect(error).to.not.exist;
+					expect(validated).to.be.an.instanceof(User);
+					expect(validated.username).to.equal('frank');
+					done();
+				})
+			});
+		});
+
+		it('should verify users with correct details (case insensitive)', function (done) {
+			User.createUser('frank', 'password', true, function(error, user) {
+				User.verifyUser('FrAnk', 'password', function(error, validated) {
+					expect(error).to.not.exist;
+					expect(validated).to.be.an.instanceof(User);
+					expect(validated.username).to.equal('frank');
+					done();
+				})
+			});
+		});
+	});
+
 	describe('Create', function() {
 		it('should fail for empty username', function (done) {
 			User.createUser('', 'password', true, function(error, user) {

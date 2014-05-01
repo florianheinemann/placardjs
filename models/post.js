@@ -6,7 +6,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var AbstractPostSchema = function AbstractPostSchema() {
-	// Create a new schema based on the array in the arguments
 	Schema.apply(this, arguments);
 
 	var dataFields = {

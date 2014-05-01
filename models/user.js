@@ -25,6 +25,23 @@ userSchema.methods.verifyPassword = function(password, callback) {
 	});
 };
 
+userSchema.statics.verifyUser = function(username, password, callback) {
+	if(!username || !password)
+		return callback('No username or password provided')
+
+	this.findOne({ username: new RegExp('^'+username+'$', "i") }, function(error, user) {
+		if(error) {
+			callback(error);
+		} else if(user) {
+			user.verifyPassword(password, function(error, validated) {
+				callback(error, (validated) ? user : false);
+			});
+		} else {
+			callback(null, false);
+		}
+	})
+};
+
 userSchema.statics.hashPassword = function(plainPassword, salt, callback) {
 	// Make salt optional
 	if(callback === undefined && salt instanceof Function) {
