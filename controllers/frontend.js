@@ -1,4 +1,9 @@
 'use strict';
 
-var Post = require('../models').Post;
+var frontend = {
+	index: function(req, res, next) {
+			res.render('index');
+	}
+}
 
+module.exports = frontend;

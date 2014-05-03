@@ -1,0 +1,12 @@
+extends layout
+
+block content
+	h1 Add/Edit your post
+	- if(errors.length)
+		ul
+			- each error in errors
+				li= error
+	form(action='/author/editor', method='post')
+		label(for='editorTitle') Title:
+		input(id='editorTitle', type='text', name='title')
+		input(type='submit', value='Save')

@@ -2,5 +2,5 @@
 
 module.exports = {
 	frontend: require('./frontend'),
-	backend: require('./backend')
+	admin: require('./admin')
 };

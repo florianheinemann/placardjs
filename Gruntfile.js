@@ -2,6 +2,7 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks('grunt-mocha-test');
 	grunt.loadNpmTasks('grunt-env');
+	grunt.loadNpmTasks('grunt-nodemon');
 
 	grunt.initConfig({
 		mochaTest: {
@@ -18,10 +19,19 @@ module.exports = function(grunt) {
 			},
 			test : {
 				src : '.test.env',
+			},
+			dev : {
+				src : '.dev.env',
+			}
+		},
+		nodemon: {
+			dev: {
+				script: 'app.js'
 			}
 		}
 	});
 
-	grunt.registerTask('test', ['env:test', 'mochaTest']);
+	grunt.registerTask('test', ['env:test', 'mochaTest:test']);
+	grunt.registerTask('dev', ['env:dev', 'nodemon:dev']);
 
 };

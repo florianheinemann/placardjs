@@ -10,7 +10,7 @@ var AbstractPostSchema = function AbstractPostSchema() {
 
 	var dataFields = {
 		title: 			{ type: String, required: true },
-		permaLink: 		{ type: String, required: true },
+		permaLink: 		{ type: String, required: true, unique: true },
 		cachedHTML: 	{ type: String, required: false },
 		cachedAt: 		{ type: Date, required: false },
 		draftStatus:	{ type: Boolean, required: true, default: true },
@@ -21,7 +21,11 @@ var AbstractPostSchema = function AbstractPostSchema() {
 	this.add(dataFields);
 
 	this.statics.findAllPublishedPosts = function(callback) {
-		this.find( { draftStatus: false }, callback);
+		this.find(
+			{ draftStatus: false }, null, 
+			{ 
+				sort: { modifiedAt: -1 }
+			}, callback);
 	}
 
 	this.statics.newPost = function(data) {
