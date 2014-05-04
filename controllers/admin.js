@@ -40,18 +40,25 @@ var admin = {
 	},
 
 	editor: function(req, res, next) {
-		res.render('editor', { errors: req.flash('editor') });
+		var errors = req.flash('editor-errors');
+		var state = req.flash('editor-state');
+		state = (state.length) ? state[0] : {};
+		res.render('editor', { errors: errors, state: state });
 	},
 
 	doEdit: function(req, res, next) {
-		req.checkBody('title', 'Please provide a title').notEmpty();
-
+		req.checkBody('title', 'Please provide a title').isLength(5);
 		var errors = req.validationErrors();
 
 		if(errors) {
 			for (var i = errors.length - 1; i >= 0; i--) {
-				req.flash('editor', errors[i].msg);
+				req.flash('editor-errors', errors[i]);
 			};
+
+			var state = {};
+			state.title = (req.body.title) ? req.body.title : '';
+			req.flash('editor-state', state);
+
 			res.redirect('/author/editor');
 		} else {
 			res.redirect('/');

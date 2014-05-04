@@ -18,9 +18,12 @@ app.set('port', config.http.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
+
+// TODO: Proper logger
 app.use(express.logger('dev'));
 
-app.use(express.bodyParser());
+app.use(express.json());
+app.use(express.urlencoded());
 app.use(expressValidator());
 
 app.use(express.methodOverride());

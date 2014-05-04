@@ -2,11 +2,11 @@ extends layout
 
 block content
 	h1 Add/Edit your post
-	- if(errors.length)
+	- if(errors && errors.length)
 		ul
 			- each error in errors
-				li= error
+				li= error.msg
 	form(action='/author/editor', method='post')
 		label(for='editorTitle') Title:
-		input(id='editorTitle', type='text', name='title')
+		input(id='editorTitle', type='text', name='title', value='#{ (state.title) ? state.title : ""  }', placeholder='Title of your post')
 		input(type='submit', value='Save')
